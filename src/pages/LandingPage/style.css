@@ -1,0 +1,10 @@
+.container{
+    width: 100%;
+    max-width: 1540px;
+    /* padding: 0 32px; */
+}
+
+.bgRain{
+    background-image: url("../../assets/background/bg-rain.jpg");
+    background-size: cover;
+}
