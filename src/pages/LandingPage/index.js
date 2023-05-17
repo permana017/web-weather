@@ -34,37 +34,42 @@ function LandingPage() {
   const key = process.env.REACT_APP_PRIVAT_KEY;
 
   const handleOncange = (e) => {
-    // if (e) {
-    axios
-      .get(
-        `https://api.openweathermap.org/geo/1.0/direct?q=${
-          e ? e : "jakarta"
-        }&limit=5&appid=${key}`
-      )
-      .then((res) => {
-        setCityCordinate(res?.data[0]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // }
-    // if (cityCordinate?.lat) {
-    axios
-      .get(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${
-          cityCordinate?.lat ? cityCordinate?.lat : "-6.1753942"
-        }&lon=${
-          cityCordinate?.lon ? cityCordinate?.lon : "106.827183"
-        }&appid=${key}`
-      )
-      .then((res) => {
-        // console.log(res.data);
-        setWeatherInpo(res?.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // }
+
+    const url = () => {
+      if (!e) {
+        return `https://api.openweathermap.org/geo/1.0/direct?q=jakarta&limit=5&appid=${key}`;
+      } else {
+        return `https://api.openweathermap.org/geo/1.0/direct?q=${e}&limit=5&appid=${key}`;
+      }
+    };
+
+    if (e) {
+      axios
+        .get(url())
+        .then((res) => {
+          setCityCordinate(res?.data[0]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (cityCordinate?.lat) {
+      axios
+        .get(
+          `https://api.openweathermap.org/data/2.5/forecast?lat=${
+            cityCordinate?.lat
+          }&lon=${
+            cityCordinate?.lon ? cityCordinate?.lon : "106.827183"
+          }&appid=${key}`
+        )
+        .then((res) => {
+          // console.log(res.data);
+          setWeatherInpo(res?.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   useEffect(() => {
