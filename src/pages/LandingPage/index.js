@@ -17,9 +17,21 @@ function LandingPage() {
   const [cityCordinate, setCityCordinate] = useState([]);
   const [weatherInpo, setWeatherInpo] = useState([]);
   const weatherMany = weatherInpo?.list?.slice(0, 10);
+  const nexTWeatherDay = () => {
+    let data = [];
+    if (weatherInpo?.list) {
+      for (let i = 0; i < 39; i++) {
+        if (i % 8 == 0) {
+          data.push(weatherInpo.list[i]);
+        }
+      }
+    }
+    return data;
+  };
+
+  console.log(nexTWeatherDay());
 
   const key = process.env.REACT_APP_PRIVAT_KEY;
-  console.log(key);
 
   const handleOncange = (e) => {
     // if (e) {
@@ -57,6 +69,7 @@ function LandingPage() {
 
   useEffect(() => {
     handleOncange();
+    nexTWeatherDay();
   }, [cityCordinate?.lat]);
 
   return (
@@ -64,8 +77,12 @@ function LandingPage() {
       <div className="container flex justify-between">
         <div className="hidden w-[70%] p-5 md:flex flex-col justify-between">
           <div className="w-full flex justify-end items-center">
-            <p className="text-white border-r-2 pr-4">21 April 2020</p>
-            <p className="text-white ml-4">11.00</p>
+            <p className="text-white border-r-2 pr-4">
+              <Moment format="DD MMMM YY">{weatherMany?.dt_txt}</Moment>
+            </p>
+            <p className="text-white ml-4">
+              <Moment format="LT"></Moment>
+            </p>
           </div>
           <div className="flex w-full flex-col">
             <div className="w-full border-b-[3px] py-9 mb-4 border-white/75">
@@ -108,7 +125,7 @@ function LandingPage() {
               {cities.map((item, i) => (
                 <option
                   key={i}
-                  className="text-black bg-gray-400 backdrop-blur-sm"
+                  className="text-black bg-gray-400 backdrop-blur-sm max-w-[80%]"
                   value={item}
                 >
                   {item}
@@ -147,7 +164,7 @@ function LandingPage() {
                 </button>
               ))}
             </div>
-            {[1, 2, 3, 4, 5].map((item, i) => (
+            {nexTWeatherDay()?.map((item, i) => (
               <div
                 key={i}
                 className="flex items-center w-full justify-between mt-5"
@@ -160,13 +177,19 @@ function LandingPage() {
                     />
                   </div>
                   <div>
-                    <p className="text-white">Friday, April 21</p>
-                    <p className="text-white/60 text-sm">Heavy Rain</p>
+                    <p className="text-white">
+                      <Moment format="dddd">{item?.dt_txt}</Moment>,{" "}
+                      <Moment format="MMMM DD">{item?.dt_txt}</Moment>
+                    </p>
+                    <p className="text-white/60 text-sm">
+                      {item?.weather[0]?.description}
+                    </p>
                   </div>
                 </div>
-                <div className="border-l-[1px] flex flex-col justify-between h-full pl-4 p-0">
-                  <p className="text-white">9&deg;</p>
-                  <p className="text-white">7&deg;</p>
+                <div className=" flex flex-col justify-center h-full  p-0">
+                  <p className="text-white border-l-[1px] pl-4">
+                    {item ? Math.ceil(item?.main?.temp - 273.15) : 0}&deg;
+                  </p>
                 </div>
               </div>
             ))}
