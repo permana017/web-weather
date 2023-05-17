@@ -25,7 +25,7 @@ function LandingPage() {
     // if (e) {
     axios
       .get(
-        `http://api.openweathermap.org/geo/1.0/direct?q=${
+        `https://api.openweathermap.org/geo/1.0/direct?q=${
           e ? e : "jakarta"
         }&limit=5&appid=${key}`
       )
@@ -39,7 +39,7 @@ function LandingPage() {
     // if (cityCordinate?.lat) {
     axios
       .get(
-        `http://api.openweathermap.org/data/2.5/forecast?lat=${
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${
           cityCordinate?.lat ? cityCordinate?.lat : "-6.1753942"
         }&lon=${
           cityCordinate?.lon ? cityCordinate?.lon : "106.827183"
