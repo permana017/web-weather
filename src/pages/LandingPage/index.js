@@ -178,7 +178,7 @@ function LandingPage() {
                   <div className="w-12 h-12 backdrop-blur-md bg-white/10 rounded-md mr-2">
                     <img
                       alt="icon"
-                      src={`https://openweathermap.org/img/wn/04d@2x.png`}
+                      src={`https://openweathermap.org/img/wn/${item?.weather[0]?.icon}@2x.png`}
                     />
                   </div>
                   <div>
