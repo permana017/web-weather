@@ -15,11 +15,11 @@ const cities = [
 
 function LandingPage() {
   const [cityCordinate, setCityCordinate] = useState([]);
-  console.log("kota", cityCordinate);
   const [weatherInpo, setWeatherInpo] = useState([]);
-  // console.log("cuaca", weatherInpo);
   const weatherMany = weatherInpo?.list?.slice(0, 10);
-  console.log(weatherMany);
+
+  const key = process.env.REACT_APP_PRIVAT_KEY;
+  console.log(key);
 
   const handleOncange = (e) => {
     // if (e) {
@@ -27,7 +27,7 @@ function LandingPage() {
       .get(
         `http://api.openweathermap.org/geo/1.0/direct?q=${
           e ? e : "jakarta"
-        }&limit=5&appid=7e0e1623e448b646e2dd26321c4fd1c1`
+        }&limit=5&appid=${key}`
       )
       .then((res) => {
         setCityCordinate(res?.data[0]);
@@ -43,7 +43,7 @@ function LandingPage() {
           cityCordinate?.lat ? cityCordinate?.lat : "-6.1753942"
         }&lon=${
           cityCordinate?.lon ? cityCordinate?.lon : "106.827183"
-        }&appid=7e0e1623e448b646e2dd26321c4fd1c1`
+        }&appid=${key}`
       )
       .then((res) => {
         // console.log(res.data);
