@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import "./style.css";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
+import "./style.css";
 
 const cities = [
   "Jakarta",
@@ -14,7 +14,6 @@ const cities = [
 ];
 
 function LandingPage() {
-  const [cityCordinate, setCityCordinate] = useState([]);
   const [weatherInpo, setWeatherInpo] = useState([]);
   const weatherMany = weatherInpo?.list?.slice(0, 10);
   const nexTWeatherDay = () => {
@@ -29,53 +28,44 @@ function LandingPage() {
     return data;
   };
 
-  console.log(nexTWeatherDay());
-
   const key = process.env.REACT_APP_PRIVAT_KEY;
 
+  const getCoordinate = (e) => {
+    axios
+      .get(
+        `https://api.openweathermap.org/geo/1.0/direct?q=${e}&limit=5&appid=${key}`
+      )
+      .then((res) => {
+        // setCityCordinate();
+        getWeather(res?.data[0]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getWeather = (param) => {
+    axios
+      .get(
+        `https://api.openweathermap.org/data/2.5/forecast?lat=${
+          param?.lat
+        }&lon=${param?.lon ? param?.lon : "106.827183"}&appid=${key}`
+      )
+      .then((res) => {
+        setWeatherInpo(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleOncange = (e) => {
-
-    const url = () => {
-      if (!e) {
-        return `https://api.openweathermap.org/geo/1.0/direct?q=jakarta&limit=5&appid=${key}`;
-      } else {
-        return `https://api.openweathermap.org/geo/1.0/direct?q=${e}&limit=5&appid=${key}`;
-      }
-    };
-
-    if (e) {
-      axios
-        .get(url())
-        .then((res) => {
-          setCityCordinate(res?.data[0]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    if (cityCordinate?.lat) {
-      axios
-        .get(
-          `https://api.openweathermap.org/data/2.5/forecast?lat=${
-            cityCordinate?.lat
-          }&lon=${
-            cityCordinate?.lon ? cityCordinate?.lon : "106.827183"
-          }&appid=${key}`
-        )
-        .then((res) => {
-          // console.log(res.data);
-          setWeatherInpo(res?.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    getCoordinate(e);
   };
 
   useEffect(() => {
-    handleOncange();
-    nexTWeatherDay();
-  }, [cityCordinate?.lat]);
+    getCoordinate("Jakarta");
+  }, []);
 
   return (
     <div className="bgRain h-[100vh] w-full flex justify-center">
